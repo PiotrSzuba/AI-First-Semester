@@ -1,0 +1,7 @@
+version: '3'
+services:
+  lab1:
+    build: .
+    volumes:
+      - .:/app
+    container_name: lab1-252807
