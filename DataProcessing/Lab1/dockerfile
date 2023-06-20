@@ -1,0 +1,12 @@
+FROM python:3.11
+
+ENV IMAGE_NAME lab1
+ENV PYTHONPATH "${PYTHONPATH}/app"
+
+WORKDIR /app
+
+COPY requirements.txt .
+
+RUN pip --no-cache-dir install -r requirements.txt
+
+CMD ["sh", "-c", "python ./scripts/main1.py & python ./scripts/main2.py & black ."]

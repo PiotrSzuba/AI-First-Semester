@@ -1,0 +1,7 @@
+FROM python:3.10
+
+WORKDIR /app
+
+RUN pip --no-cache-dir install mlflow
+
+EXPOSE 5000

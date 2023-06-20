@@ -1,0 +1,21 @@
+version: "3"
+services:
+  dnn:
+    build:
+      context: .
+      dockerfile: dockerfile
+    volumes:
+      - .:/home/jovyan
+      - .:/app
+      - ./dane:/dane
+    ports:
+      - "8888:8888"
+    command: jupyter notebook --ip=0.0.0.0 --port=8888 --allow-root --NotebookApp.token='' --NotebookApp.password=''
+    container_name: DNN13-252807
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]

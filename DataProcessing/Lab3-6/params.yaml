@@ -1,0 +1,4 @@
+split_ratio: 0.3
+random_seed: 42
+target_column: sentiment
+strategy: uniform

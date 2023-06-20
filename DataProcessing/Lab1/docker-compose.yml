@@ -1,0 +1,17 @@
+version: '3'
+services:
+  lab1:
+    build: .
+    volumes:
+      - .:/app
+    container_name: lab1-252807
+  jupyter:
+    image: jupyter/base-notebook
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./notebooks:/home/jovyan
+      - ./src:/app/src
+    environment:
+      PYTHONPATH: /app/src
+    command: start-notebook.sh --NotebookApp.token='' --NotebookApp.password=''  

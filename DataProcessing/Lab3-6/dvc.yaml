@@ -1,0 +1,62 @@
+stages:
+  preprocess:
+    cmd: python ./scripts/preprocess_data.py ./data/output/processed_data.csv
+    deps:
+    - ./scripts/Review.py
+    - ./scripts/preprocess_data.py
+    - ./data/input
+    - ./data/movie_input
+    outs:
+    - ./data/output/processed_data.csv
+  split:
+    cmd: python ./scripts/split_data.py ./data/output/processed_data.csv ./data/split/train.csv ./data/split/test.csv
+    deps:
+    - ./params.yaml
+    - ./scripts/split_data.py
+    - ./data/output/processed_data.csv
+    outs:
+    - ./data/split/train.csv
+    - ./data/split/test.csv
+  analyze:
+    cmd: python ./scripts/data_analysis.py ./data/output/processed_data.csv
+    deps:
+    - ./scripts/data_analysis.py
+    - ./data/output/processed_data.csv
+  extract:
+    cmd: python ./scripts/extract_features.py ./data/split/train.csv ./data/split/test.csv ./data/output/train_features.csv ./data/output/test_features.csv
+    deps:
+    - ./scripts/extract_features.py
+    - ./data/split/train.csv
+    - ./data/split/test.csv
+    outs:
+    - ./data/output/train_features.csv
+    - ./data/output/test_features.csv
+  train:
+    cmd: python ./scripts/train_model.py ./data/output/train_features.csv ./data/output/test_features.csv ./data/output/metrics.json
+    deps:
+    - ./params.yaml
+    - ./scripts/train_model.py
+    - ./data/output/train_features.csv
+    - ./data/output/test_features.csv
+    metrics:
+      - ./data/output/metrics.json:
+          cache: false
+  params:
+    cmd: jupyter nbconvert --to notebook --execute ./scripts/params.ipynb --output ../data/output/params_test_output.ipynb
+    deps:
+    - ./scripts/Review.py
+    - ./scripts/preprocess_data.py
+    - ./scripts/split_data.py
+    - ./scripts/extract_features.py
+    - ./scripts/train_model.py
+    - ./scripts/params.ipynb
+    outs:
+      - ./data/output/params_test_output.nbconvert.ipynb
+  #run_notebook:
+    #cmd: jupyter nbconvert --to notebook --execute ./notebooks/eda.ipynb --output ../data/output/eda_output.ipynb
+    #deps:
+      #- ./data/output/processed_data.csv
+      #- ./notebooks/eda.ipynb
+    #outs:
+      #-  ./data/output/eda_output.ipynb:
+          #cache: false

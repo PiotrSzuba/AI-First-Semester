@@ -1,0 +1,30 @@
+version: '3'
+services:
+  mlflow:
+    build: 
+      context: .
+      dockerfile: dockerfile_mlflow
+    volumes:
+      - ./mlflow_data:/app/mlflow_data
+    container_name: PDIOW-252807-mlflow
+    ports:
+      - "5000:5000"
+    networks:
+      - my_network
+    command: mlflow server --backend-store-uri sqlite:///mlflow_data/mlflow.db --default-artifact-root ./mlflow_data/artifacts --host 0.0.0.0 --port 5000
+  pdiow:
+    build: 
+      context: .
+      dockerfile: dockerfile
+    volumes:
+      - .:/app
+    container_name: PDIOW-252807-app
+    environment:
+      - MLFLOW_TRACKING_URI=http://host.docker.internal:5000
+    depends_on:
+      - mlflow
+    networks:
+      - my_network
+    command: tail -f /dev/null
+networks:
+  my_network:

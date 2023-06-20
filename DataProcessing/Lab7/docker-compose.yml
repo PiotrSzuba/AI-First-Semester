@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+  pdiow_python:
+    build: .
+    ports:
+      - "8501:8501"
+    environment:
+      CLIENT_ID: EnIuA1Lb5TK6l320evL5lA
+      CLIENT_SECRET: 5Yi00WBGTIM4VCfXWOrvPEdAPMBUSA
+      REDDIT_USERNAME: 252807
+      PASSWORD: 123qazxS#
+    depends_on:
+      - graphite
+
+  graphite:
+    image: graphiteapp/graphite-statsd
+    ports:
+      - "80:80"
+      - "2003-2004:2003-2004"
+      - "2023-2024:2023-2024"
+      - "8125:8125/udp"
+      - "8126:8126"
+    volumes:
+      - graphite-data:/opt/graphite/storage/whisper
+      - graphite-conf:/opt/graphite/conf
+    
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - graphite
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: 123qazxS#
+    volumes:
+      - grafana-data:/var/lib/grafana
+      
+volumes:
+  graphite-data:
+  graphite-conf:
+  grafana-data:

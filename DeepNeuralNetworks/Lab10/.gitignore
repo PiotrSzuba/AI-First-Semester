@@ -1,0 +1,11 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/dane
+/predictions2
+*.txt
+/.ipynb_checkpoints
+/emo_model.vec
+/emo_model.bin

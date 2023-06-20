@@ -1,0 +1,16 @@
+version: '3'
+services:
+  pdiow_lab1_jupyter:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/home/jovyan
+      - .:/app
+    ports:
+      - "8888:8888"
+    command: start-notebook.sh --NotebookApp.token='' --NotebookApp.password='' 
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+    depends_on:
+      - requirements
